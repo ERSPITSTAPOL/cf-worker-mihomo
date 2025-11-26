@@ -69,7 +69,7 @@ default {
 
             if (yamlParam === 'true') {
                 const obj = JSON.parse(res.data);
-                body = YAML.stringify(obj);
+                body = YAML.stringify(obj, { schema: 'failsafe' });
                 headers.set('Content-Type', 'text/yaml; charset=utf-8');
             } else {
                 headers.set('Content-Type', 'application/json; charset=utf-8');
