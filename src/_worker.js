@@ -3,9 +3,12 @@ import { getsingbox_config } from './singbox.js';
 import { getv2ray_config } from './v2ray.js';
 import { getFakePage } from './page.js';
 import * as utils from './utils.js';
+import YAML from 'yaml';
+
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
+        const format = url.searchParams.get('format') || 'json';
         const e = {
             url,
             urls: url.searchParams.getAll('url'),
@@ -32,11 +35,11 @@ export default {
             beian: env.BEIAN || utils.beiantext,
             beianurl: env.BEIANURL || utils.beiandizi,
             configs: utils.configs(env.MIHOMO, env.SINGBOX),
-        }
-        e.modes = utils.modes(e.sub, e.userAgent)
+        };
+        e.modes = utils.modes(e.sub, e.userAgent);
 
         if (e.urls.length === 1 && e.urls[0].includes(',')) {
-            e.urls = e.urls[0].split(',').map((u) => u.trim()); // 拆分并去除空格
+            e.urls = e.urls[0].split(',').map((u) => u.trim());
         }
 
         if (e.urls.length === 0 || e.urls[0] === '') {
@@ -47,25 +50,30 @@ export default {
                 },
             });
         }
+
         try {
             let res, headers, status;
-            if (e.singbox) {
-                res = await getsingbox_config(e);
-            } else if (e.mihomo) {
-                res = await getmihomo_config(e);
-            } else if (e.v2ray) {
-                res = await getv2ray_config(e);
-            }
+
+            if (e.singbox) res = await getsingbox_config(e);
+            else if (e.mihomo) res = await getmihomo_config(e);
+            else if (e.v2ray) res = await getv2ray_config(e);
+
             const responseHeaders = res.headers;
             headers = new Headers(responseHeaders);
             status = res.status;
-            headers.set('Content-Type', 'application/json; charset=utf-8');
-            headers.set('Profile-web-page-url', url.origin);
 
-            return new Response(res.data, {
-                status,
-                headers,
-            });
+            let body = res.data; // 默认 JSON 字符串
+
+            if (format === 'yaml') {
+                const obj = JSON.parse(res.data);     // JSON → JS 对象
+                body = YAML.stringify(obj);           // JS 对象 → YAML 字符串
+                headers.set('Content-Type', 'text/yaml; charset=utf-8');
+            } else {
+                headers.set('Content-Type', 'application/json; charset=utf-8');
+            }
+
+            headers.set('Profile-web-page-url', url.origin);
+            return new Response(body, { status, headers });
         } catch (err) {
             return new Response(err.message, {
                 status: 400,
