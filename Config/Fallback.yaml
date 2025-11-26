@@ -61,7 +61,6 @@ dns:
   use-hosts: false
   use-system-hosts: false
   respect-rules: false
-#  listen: 0.0.0.0:1053
   ipv6: false
   ipv6-timeout: 200
   enhanced-mode: fake-ip
@@ -100,23 +99,22 @@ dns:
   proxy-server-nameserver: 
     - 'quic://223.5.5.5'
   nameserver-policy: 
-    "rule-set:tld-cn,geolocation-cn": [system]
+    "rule-set:tld-cn,geolocation-cn": [dhcp://system]
   direct-nameserver: 
     - 'quic://223.5.5.5'
   direct-nameserver-follow-policy: true
-
 rule-providers:
   geolocation-cn:
     type: http
     interval: 0
     behavior: domain
     format: mrs
-    proxy: DIRECT
+    proxy: 🚀Global
     url: "https://jsd.onmicrosoft.cn/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-cn.mrs"
   tld-cn:
     type: http
     interval: 0
     behavior: domain
     format: mrs
-    proxy: DIRECT
+    proxy: 🚀Global
     url: "https://jsd.onmicrosoft.cn/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/tld-cn.mrs"
