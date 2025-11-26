@@ -3,15 +3,12 @@ import YAML from 'yaml';
 export const backimg = base64DecodeUtf8('');
 export const subapi = base64DecodeUtf8('');
 export const mihomo_top = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0VSU1BJVFNUQVBPTC9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvRmFsbGJhY2sueWFtbA==' );
-export const singbox_1_11 = base64DecodeUtf8(
-    'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveF8xLjExLlguanNvbg=='
+export const singbox_1_11 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveF8xLjExLlguanNvbg=='
 );
-export const singbox_1_12 = base64DecodeUtf8(
-    'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEyLlguanNvbg=='
+export const singbox_1_12 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEyLlguanNvbg=='
 );
 export const singbox_1_12_alpha = base64DecodeUtf8('');
-export const singbox_1_13 = base64DecodeUtf8(
-    'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEzLlguanNvbg=='
+export const singbox_1_13 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEzLlguanNvbg=='
 );
 export const beiantext = base64DecodeUtf8('');
 export const beiandizi = base64DecodeUtf8('');
@@ -132,6 +129,10 @@ export function configs(mihomo = '', singbox = '') {
                         value: 'https://raw.githubusercontent.com/ERSPITSTAPOL/cf-worker-mihomo/refs/heads/main/template/Selector.yaml',
                     },
                     {
+                        label: '简易分流Auto&Select',
+                        value: 'https://raw.githubusercontent.com/ERSPITSTAPOL/cf-worker-mihomo/refs/heads/main/template/FL.yaml',
+                    },
+                    {
                         label: '默认(精简版) (仅国内外分流) (与Github同步) ',
                         value: 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml',
                     },
@@ -230,13 +231,10 @@ export function modes(sub, userAgent) {
 ## mihomo 使用提示：
 
 - 支持各种订阅或单节点链接，自动合并生成配置
-- 面板地址: http://127.0.0.1:9090/ui/xd
 - mixed(http/socks) 端口: 7890
-- 使用 sub-store 后端转换
 - 适用于 mihomo 客户端
 - 去广告使用 [秋风广告规则](https://github.com/TG-Twilight/AWAvenue-Ads-Rule.git)
 - 防止 DNS 泄漏(安全DNS/DoH)
-- 屏蔽 WebRTC 泄漏(防止真实IP暴露)
 - 关闭所有覆写功能(不是关闭功能，是关闭覆写)以确保配置正常生效
 
 ## 附加参数说明
@@ -246,7 +244,7 @@ export function modes(sub, userAgent) {
 - 分IPCIDR代理: 排除 CN IP 不进入代理工具 [查看详情](https://wiki.metacubex.one/config/inbound/tun/#route-exclude-address)
 - 去广告dns: 直连使用 [dns.18bit.cn](https://www.18bit.cn), 代理使用 [dns.adguard-dns.com](https://adguard-dns.io/)
 - 仅代理: 关闭 VPN 代理，使用 mixed(http/socks) 端口进行代理。实际就是关闭了 tun 入站
-- 输出 YAML: 勾选后生成的订阅链接会自动添加 &format=yaml 参数
+- 输出 YAML: 勾选后生成的订阅链接会自动转换成yaml格式
 
 ## 配置信息
 
