@@ -32,7 +32,7 @@ export function base64EncodeUtf8(str) {
     return btoa(binary);
 }
 // 订阅链接
-export function buildApiUrl(rawUrl, BASE_API, ua) {
+export function buildApiUrl(rawUrl, BASE_API, ua, formatOption) {
     const params = new URLSearchParams({
         target: ua,
         url: rawUrl,
@@ -40,8 +40,9 @@ export function buildApiUrl(rawUrl, BASE_API, ua) {
         list: 'true',
         new_name: 'true',
     });
-        if (formatOption === 'format=yaml') {
+    if (formatOption === 'format=yaml') {
         params.set('format', 'yaml');
+    }
     return `${BASE_API}/sub?${params}`;
 }
 // 处理请求
