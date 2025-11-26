@@ -52,7 +52,7 @@ tun:
   auto-detect-interface: true
   disable-icmp-forwarding: true
   endpoint-independent-nat: false
-  dns-hijack: ['any:53', 'tcp://any:53']
+  dns-hijack: ["any:53", "tcp://any:53"]
 dns:
   enable: true
   cache-algorithm: arc
@@ -69,16 +69,16 @@ dns:
   fake-ip-range6: fd00:ffff::/112
   fake-ip-filter-mode: blacklist
   fake-ip-filter: 
-    - '*.lan'
-    - '+.miwifi.com'
-    - '+.market.xiaomi.com'
-    - '+.api.xmpush.xiaomi.com'
-    - '+.microsoftonline-p.com'
-    - '+.microsoftonline.com'
-    - '+.msftncsi.com'
-    - '+.microsoft.com'
-    - '+.vivo.com.cn'
-    - '+.dl.l.google.com'
+    - "*.lan"
+    - "+.miwifi.com"
+    - "+.market.xiaomi.com"
+    - "+.api.xmpush.xiaomi.com"
+    - "+.microsoftonline-p.com"
+    - "+.microsoftonline.com"
+    - "+.msftncsi.com"
+    - "+.microsoft.com"
+    - "+.vivo.com.cn"
+    - "+.dl.l.google.com"
     - mtalk.google.com
     - mtalk-dev.google.com
     - mtalk-staging.google.com
@@ -93,15 +93,15 @@ dns:
     - alt8-mtalk.google.com
     - localhost.ptlogin2.qq.com
   default-nameserver: 
-    - 'quic://223.5.5.5'
+    - "quic://223.5.5.5"
   nameserver: 
-    - 'tcp://8.8.8.8#🚀Global'
+    - "tcp://8.8.8.8#🚀Global"
   proxy-server-nameserver: 
-    - 'quic://223.5.5.5'
+    - "quic://223.5.5.5"
   nameserver-policy: 
-    "rule-set:tld-cn,geolocation-cn": [dhcp://system]
+    "rule-set:tld-cn,geolocation-cn": ["dhcp://system"]
   direct-nameserver: 
-    - 'quic://223.5.5.5'
+    - "quic://223.5.5.5"
   direct-nameserver-follow-policy: true
 rule-providers:
   geolocation-cn:
