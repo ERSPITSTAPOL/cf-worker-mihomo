@@ -22,6 +22,7 @@ export async function getmihomo_config(e) {
 
     e.Exclude_Package = Exclude_Package;
     e.Exclude_Address = Exclude_Address;
+
     if (!Mihomo_Proxies_Data?.data?.proxies || Mihomo_Proxies_Data?.data?.proxies?.length === 0)
         throw new Error('节点为空');
     Mihomo_Rule_Data.data.proxies = [
@@ -36,11 +37,35 @@ export async function getmihomo_config(e) {
 
     Mihomo_Rule_Data.data['proxy-providers'] = Mihomo_Proxies_Data?.data?.providers;
 
+    {
+        const allProxyNames = new Set(
+            (Mihomo_Rule_Data.data.proxies || []).map(p => p.name)
+        );
+        const allGroupNames = new Set(
+            (Mihomo_Rule_Data.data["proxy-groups"] || []).map(g => g.name)
+        );
+        Mihomo_Rule_Data.data["proxy-groups"] =
+            Mihomo_Rule_Data.data["proxy-groups"].map(group => {
+
+                // 清洗 proxies[]
+                if (Array.isArray(group.proxies)) {
+                    group.proxies = group.proxies.filter(name =>
+                        allProxyNames.has(name) || allGroupNames.has(name)
+                    );
+                }
+
+                // 清洗 use[]                if (Array.isArray(group.use)) {
+                    group.use = group.use.filter(name =>
+                        allProxyNames.has(name) || allGroupNames.has(name)
+                    );
+                }
+
+                return group;
+            });
+    }
     Mihomo_Rule_Data.data['proxy-groups'] = Mihomo_Rule_Data.data['proxy-groups'].filter(group => {
         const emptyProxies = Array.isArray(group.proxies) && group.proxies.length === 0;
         const emptyUse = Array.isArray(group.use) && group.use.length === 0;
-
-        // proxies:[] 或 use:[] → 删除
         return !(emptyProxies || emptyUse);
     });
 
@@ -51,11 +76,13 @@ export async function getmihomo_config(e) {
         data: JSON.stringify(Mihomo_Top_Data.data, null, 4),
     };
 }
+
 /**
  * 将模板中的 proxies、proxy-groups、rules 等字段合并到目标配置对象
  * @param {Object} target - 目标配置对象（基础配置）
  * @param {Object} template - 模板配置对象
  */
+ 
 export function applyTemplate(top, rule, e) {
     top['proxy-providers'] = rule['proxy-providers'] || {};
     top.proxies = rule.proxies || [];
@@ -133,6 +160,5 @@ export function getMihomo_Proxies_Grouping(proxies, groups) {
             });
         }
     });
-
     return updatedGroups;
 }
