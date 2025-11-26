@@ -28,17 +28,30 @@ export async function getmihomo_config(e) {
     if (!Mihomo_Proxies_Data?.data?.proxies || Mihomo_Proxies_Data?.data?.proxies?.length === 0)
         throw new Error('节点为空');
 
+    // 合并 proxies
     Mihomo_Rule_Data.data.proxies = [
         ...(Mihomo_Rule_Data?.data?.proxies || []),
         ...Mihomo_Proxies_Data?.data?.proxies
     ];
 
-    Mihomo_Rule_Data.data['proxy-groups'] = getMihomo_Proxies_Grouping(
+    // 分组处理
+    Mihomo_Rule_Data.data["proxy-groups"] = getMihomo_Proxies_Grouping(
         Mihomo_Proxies_Data.data,
         Mihomo_Rule_Data.data
     );
 
-    Mihomo_Rule_Data.data['proxy-providers'] = Mihomo_Proxies_Data?.data?.providers;
+    // providers
+    Mihomo_Rule_Data.data["proxy-providers"] = Mihomo_Proxies_Data?.data?.providers;
+
+    Mihomo_Rule_Data.data["proxy-groups"] =
+        Mihomo_Rule_Data.data["proxy-groups"].filter(group => {
+
+            const emptyProxies =
+                Array.isArray(group.proxies) && group.proxies.length === 0;
+            const emptyUse =
+                Array.isArray(group.use) && group.use.length === 0;
+            return !(emptyProxies || emptyUse);
+        });
 
     applyTemplate(Mihomo_Top_Data.data, Mihomo_Rule_Data.data, e);
 
