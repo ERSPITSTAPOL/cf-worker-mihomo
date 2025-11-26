@@ -5,7 +5,9 @@ export async function getmihomo_config(e) {
     if (!/meta|clash.meta|clash|clashverge|mihomo/i.test(e.userAgent)) {
         throw new Error('不支持的客户端');
     }
+
     e.urls = utils.splitUrlsAndProxies(e.urls);
+
     const [
         Mihomo_Top_Data,
         Mihomo_Rule_Data,
@@ -25,6 +27,7 @@ export async function getmihomo_config(e) {
 
     if (!Mihomo_Proxies_Data?.data?.proxies || Mihomo_Proxies_Data?.data?.proxies?.length === 0)
         throw new Error('节点为空');
+
     Mihomo_Rule_Data.data.proxies = [
         ...(Mihomo_Rule_Data?.data?.proxies || []),
         ...Mihomo_Proxies_Data?.data?.proxies
@@ -37,39 +40,8 @@ export async function getmihomo_config(e) {
 
     Mihomo_Rule_Data.data['proxy-providers'] = Mihomo_Proxies_Data?.data?.providers;
 
-    {
-        const allProxyNames = new Set(
-            (Mihomo_Rule_Data.data.proxies || []).map(p => p.name)
-        );
-        const allGroupNames = new Set(
-            (Mihomo_Rule_Data.data["proxy-groups"] || []).map(g => g.name)
-        );
-        Mihomo_Rule_Data.data["proxy-groups"] =
-            Mihomo_Rule_Data.data["proxy-groups"].map(group => {
-
-                // 清洗 proxies[]
-                if (Array.isArray(group.proxies)) {
-                    group.proxies = group.proxies.filter(name =>
-                        allProxyNames.has(name) || allGroupNames.has(name)
-                    );
-                }
-
-                // 清洗 use[]                if (Array.isArray(group.use)) {
-                    group.use = group.use.filter(name =>
-                        allProxyNames.has(name) || allGroupNames.has(name)
-                    );
-                }
-
-                return group;
-            });
-    }
-    Mihomo_Rule_Data.data['proxy-groups'] = Mihomo_Rule_Data.data['proxy-groups'].filter(group => {
-        const emptyProxies = Array.isArray(group.proxies) && group.proxies.length === 0;
-        const emptyUse = Array.isArray(group.use) && group.use.length === 0;
-        return !(emptyProxies || emptyUse);
-    });
-
     applyTemplate(Mihomo_Top_Data.data, Mihomo_Rule_Data.data, e);
+
     return {
         status: Mihomo_Proxies_Data.status,
         headers: Mihomo_Proxies_Data.headers,
