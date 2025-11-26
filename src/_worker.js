@@ -64,7 +64,7 @@ export default {
 
             let body = res.data; // 默认 JSON 字符串
 
-            if (format === 'yaml') {
+            if (yaml === 'true') {
                 const obj = JSON.parse(res.data);     // JSON → JS 对象
                 body = YAML.stringify(obj);           // JS 对象 → YAML 字符串
                 headers.set('Content-Type', 'text/yaml; charset=utf-8');
