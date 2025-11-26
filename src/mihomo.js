@@ -2,9 +2,6 @@ import * as utils from './utils.js';
 import getMihomo_Proxies_Data from './proxies.js';
 
 export async function getmihomo_config(e) {
-    if (!/meta|clash.meta|clash|clashverge|mihomo/i.test(e.userAgent)) {
-        throw new Error('不支持的客户端');
-    }
 
     e.urls = utils.splitUrlsAndProxies(e.urls);
 
