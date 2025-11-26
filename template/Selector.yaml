@@ -12,6 +12,11 @@ FilterKR: &FilterKR '^(?=.*(?i)(韩|韩国|🇰🇷|韓|首尔|南朝鲜|KR|KOR|
 FilterUS: &FilterUS '^(?=.*(美|美国|🇺🇸|US|凤凰城|西雅图|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$'
 FilterOther: &FilterOther '^(?!.*(香港|坡|狮城|新加坡|台|灣|台灣|台湾|日|日本|东京|韩|韩国|韓|首尔|南朝鲜|美|美国|凤凰城|西雅图|HK|HKG|Hong|SG|SIN|XSP|Singapore|TW|tai|TPE|TSA|KHH|JP|Japan|NRT|HND|KIX|CTS|FUK|KR|KOR|ROK|Korea|South|US|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|🇭🇰|🇸🇬|🇹🇼|🇯🇵|🇰🇷|🇺🇸|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|续费|更多|客户端|官方|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)).*$'
 FilterAll: &FilterAll '^(?!.*(DIRECT|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|续费|更多|客户端|官方|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)).*$'
+# Group-Selector Anchors
+SelectHK: &SelectHK {type: select, hidden: false, proxies: [🇭🇰HongKong, 🇸🇬Singapore, 🇹🇼Taiwan, 🇺🇸United States, 🇯🇵Japan, 🇰🇷South Korea, 🚀Global, 🛰Others]}
+SelectSG: &SelectSG {type: select, hidden: false, proxies: [🇸🇬Singapore, 🇭🇰HongKong, 🇹🇼Taiwan, 🇺🇸United States, 🇯🇵Japan, 🇰🇷South Korea, 🚀Global, 🛰Others]}
+SelectUS: &SelectUS {type: select, hidden: false, proxies: [🇺🇸United States, 🇭🇰HongKong, 🇸🇬Singapore, 🇹🇼Taiwan, 🇯🇵Japan, 🇰🇷South Korea, 🚀Global, 🛰Others]}
+SelectProxy: &SelectProxy {type: select, hidden: false, proxies: [🚀Global, 🇸🇬Singapore, 🇭🇰HongKong, 🇹🇼Taiwan, 🇺🇸United States, 🇯🇵Japan, 🇰🇷South Korea, 🛰Others]}
 
 proxy-groups: 
   - {name: Google,   <<: *SelectHK}
