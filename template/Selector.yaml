@@ -47,7 +47,6 @@ proxy-groups:
   - {name: 🇯🇵JP-Auto,   <<: *UrlTest, filter: *FilterJP}
   - {name: 🇰🇷ROK-Auto, <<: *UrlTest, filter: *FilterKR}
   
-rules:
 rule-providers:
   # Domain
   telegram: {<<: *DomainMrs, url: https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@meta/geo-lite/geosite/telegram.mrs}
