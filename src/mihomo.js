@@ -2,74 +2,61 @@ import * as utils from './utils.js';
 import getMihomo_Proxies_Data from './proxies.js';
 
 export async function getmihomo_config(e) {
+	e.urls = utils.splitUrlsAndProxies(e.urls);
+	
+	const [
+		Mihomo_Top_Data,
+		Mihomo_Rule_Data,
+		Mihomo_Proxies_Data,
+		Exclude_Package,
+		Exclude_Address
+	] = await Promise.all([
+		utils.Top_Data(e.Mihomo_default),
+		utils.Rule_Data(e.rule),
+		getMihomo_Proxies_Data(e),
+		e.exclude_package ? utils.fetchpackExtract() : null,
+		e.exclude_address ? utils.fetchipExtract() : null,
+	]);
+	e.Exclude_Package = Exclude_Package;
+	e.Exclude_Address = Exclude_Address;
+	if (!Mihomo_Proxies_Data?.data?.proxies || Mihomo_Proxies_Data?.data?.proxies?.length === 0)
+		throw new Error('节点为空');
 
-    e.urls = utils.splitUrlsAndProxies(e.urls);
+	// 合并 proxies
+	Mihomo_Rule_Data.data.proxies = [
+		...(Mihomo_Rule_Data?.data?.proxies || []),
+		...Mihomo_Proxies_Data?.data?.proxies
+	];
+	// 分组
+	let groups = getMihomo_Proxies_Grouping(
+		Mihomo_Proxies_Data.data,
+		Mihomo_Rule_Data.data
+	);
+	
+	const emptyGroupNames = new Set(
+		groups.filter(g => Array.isArray(g.proxies) && g.proxies.length === 0).map(g => g.name)
 
-    const [
-        Mihomo_Top_Data,
-        Mihomo_Rule_Data,
-        Mihomo_Proxies_Data,
-        Exclude_Package,
-        Exclude_Address
-    ] = await Promise.all([
-        utils.Top_Data(e.Mihomo_default),
-        utils.Rule_Data(e.rule),
-        getMihomo_Proxies_Data(e),
-        e.exclude_package ? utils.fetchpackExtract() : null,
-        e.exclude_address ? utils.fetchipExtract() : null,
-    ]);
+	);
 
-    e.Exclude_Package = Exclude_Package;
-    e.Exclude_Address = Exclude_Address;
+	// 删除空组
+	groups = groups.filter(g => !emptyGroupNames.has(g.name));
+	groups.forEach(g => {
+		if (Array.isArray(g.proxies)) {
+			g.proxies = g.proxies.filter(name => !emptyGroupNames.has(name));
+		}
+		if (Array.isArray(g.use)) {
+			g.use = g.use.filter(name => !emptyGroupNames.has(name));
+		}
 
-    if (!Mihomo_Proxies_Data?.data?.proxies || Mihomo_Proxies_Data?.data?.proxies?.length === 0)
-        throw new Error('节点为空');
-
-    // 合并 proxies
-    Mihomo_Rule_Data.data.proxies = [
-        ...(Mihomo_Rule_Data?.data?.proxies || []),
-        ...Mihomo_Proxies_Data?.data?.proxies
-    ];
-
-    // 分组
-    let groups = getMihomo_Proxies_Grouping(
-        Mihomo_Proxies_Data.data,
-        Mihomo_Rule_Data.data
-    );
-    // 找到空组
-    const emptyGroupNames = new Set(
-        groups
-            .filter(g => {
-                const p = Array.isArray(g.proxies) ? g.proxies : [];
-                const u = Array.isArray(g.use) ? g.use : [];
-                return p.length === 0 || u.length === 0;
-            })
-            .map(g => g.name)
-    );
-
-    // 删除空组
-    groups = groups.filter(g => !emptyGroupNames.has(g.name));
-
-    // 清理其他组中的引用
-    groups.forEach(g => {
-        if (Array.isArray(g.proxies)) {
-            g.proxies = g.proxies.filter(name => !emptyGroupNames.has(name));
-        }
-        if (Array.isArray(g.use)) {
-            g.use = g.use.filter(name => !emptyGroupNames.has(name));
-        }
-    });
-
-    Mihomo_Rule_Data.data["proxy-groups"] = groups;
-    // providers
-    Mihomo_Rule_Data.data["proxy-providers"] = Mihomo_Proxies_Data?.data?.providers;
-
-    applyTemplate(Mihomo_Top_Data.data, Mihomo_Rule_Data.data, e);
-    return {
-        status: Mihomo_Proxies_Data.status,
-        headers: Mihomo_Proxies_Data.headers,
-        data: JSON.stringify(Mihomo_Top_Data.data, null, 4),
-    };
+	});
+	Mihomo_Rule_Data.data["proxy-groups"] = groups;
+	Mihomo_Rule_Data.data["proxy-providers"] = Mihomo_Proxies_Data?.data?.providers;
+	applyTemplate(Mihomo_Top_Data.data, Mihomo_Rule_Data.data, e);
+	return {
+		status: Mihomo_Proxies_Data.status,
+		headers: Mihomo_Proxies_Data.headers,
+		data: JSON.stringify(Mihomo_Top_Data.data, null, 4),
+	};
 }
 
 /**
