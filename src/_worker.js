@@ -68,8 +68,16 @@ default {
             let body = res.data; // 默认 JSON
 
             if (yamlParam === 'true') {
+                const customSchema = YAML.DEFAULT_SCHEMA.extend([
+              {
+                 identify: value => typeof value === 'string',
+                 tag: '!str',
+                 resolve: doc => doc,
+                 construct: doc => doc
+              }
+            ]);
                 const obj = JSON.parse(res.data);
-                body = YAML.stringify(obj, { schema: 'failsafe' });
+                body = YAML.stringify(obj, { schema: customSchema });
                 headers.set('Content-Type', 'text/yaml; charset=utf-8');
             } else {
                 headers.set('Content-Type', 'application/json; charset=utf-8');
