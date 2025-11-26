@@ -2,18 +2,14 @@
 import YAML from 'yaml';
 export const backimg = base64DecodeUtf8('');
 export const subapi = base64DecodeUtf8('');
-export const mihomo_top = base64DecodeUtf8(
-    'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL21haW4vQ29uZmlnL01paG9tb19saXRlLnlhbWw='
-);
+export const mihomo_top = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0VSU1BJVFNUQVBPTC9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvRmFsbGJhY2sueWFtbA==' );
 export const singbox_1_11 = base64DecodeUtf8(
     'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveF8xLjExLlguanNvbg=='
 );
 export const singbox_1_12 = base64DecodeUtf8(
     'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEyLlguanNvbg=='
 );
-export const singbox_1_12_alpha = base64DecodeUtf8(
-    'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEyLlguYWxwaGEuanNvbg=='
-);
+export const singbox_1_12_alpha = base64DecodeUtf8('');
 export const singbox_1_13 = base64DecodeUtf8(
     'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEzLlguanNvbg=='
 );
@@ -132,6 +128,10 @@ export function configs(mihomo = '', singbox = '') {
                 label: '通用',
                 options: [
                     {
+                        label: '简易分流Selector&Fallback',
+                        value: 'https://raw.githubusercontent.com/ERSPITSTAPOL/cf-worker-mihomo/refs/heads/main/template/Selector.yaml',
+                    },
+                    {
                         label: '默认(精简版) (仅国内外分流) (与Github同步) ',
                         value: 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml',
                     },
@@ -162,44 +162,6 @@ export function configs(mihomo = '', singbox = '') {
                     {
                         label: '默认(全分组) (无去广告) (与Github同步) ',
                         value: 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_full_NoAds.yaml',
-                    },
-                ],
-            },
-            {
-                label: 'Lanlan13-14',
-                options: [
-                    {
-                        label: 'configfull 全分组版 (秋风去广告) (与Github同步)',
-                        value: 'https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull.yaml',
-                    },
-                    {
-                        label: 'configfull_NoAd 全分组版 (无去广告) (与Github同步)',
-                        value: 'https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd.yaml',
-                    },
-                    {
-                        label: 'configfull_NoAd_lite 全分组版 (无去广告) (精简版) (与Github同步)',
-                        value: 'https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_lite.yaml',
-                    },
-                    {
-                        label: 'configfull_lite 全分组版 (精简版) (与Github同步)',
-                        value: 'https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_lite.yaml',
-                    },
-                ],
-            },
-            {
-                label: 'mihomo-party-org',
-                options: [
-                    {
-                        label: '布丁狗的订阅转换 (与Github同步)',
-                        value: 'https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/%E5%B8%83%E4%B8%81%E7%8B%97%E7%9A%84%E8%AE%A2%E9%98%85%E8%BD%AC%E6%8D%A2.yaml',
-                    },
-                    {
-                        label: 'ACL4SSR_Online_Full (与Github同步)',
-                        value: 'https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml',
-                    },
-                    {
-                        label: 'ACL4SSR_Online_Full_WithIcon (与Github同步)',
-                        value: 'https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full_WithIcon.yaml',
                     },
                 ],
             },
@@ -298,7 +260,7 @@ export function modes(sub, userAgent) {
                 { value: 'ea', label: '启用 分IPCIDR代理(ios/macOS/windows/linux 推荐)' },
                 { value: 'adgdns', label: '启用 去广告dns' },
                 { value: 'tun', label: '启用 仅代理' },
-                { value: 'yaml', label: '输出为YAML文件' },
+                { value: 'yaml', label: '输出为YAML文件', checked: true },
             ],
         },
         singbox: {
