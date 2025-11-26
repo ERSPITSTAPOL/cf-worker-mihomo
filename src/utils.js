@@ -1,7 +1,7 @@
 // import fetch from 'node-fetch';
 import YAML from 'yaml';
-export const backimg = base64DecodeUtf8('aHR0cHM6Ly90LmFsY3kuY2MveWN5');
-export const subapi = base64DecodeUtf8('aHR0cHM6Ly9zdWItc3RvcnQtbm9kZWpzLnBhZ2VzLmRldg==');
+export const backimg = base64DecodeUtf8('');
+export const subapi = base64DecodeUtf8('');
 export const mihomo_top = base64DecodeUtf8(
     'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL21haW4vQ29uZmlnL01paG9tb19saXRlLnlhbWw='
 );
@@ -17,8 +17,8 @@ export const singbox_1_12_alpha = base64DecodeUtf8(
 export const singbox_1_13 = base64DecodeUtf8(
     'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEzLlguanNvbg=='
 );
-export const beiantext = base64DecodeUtf8('6JCMSUNQ5aSHMjAyNTAwMDHlj7c=');
-export const beiandizi = base64DecodeUtf8('aHR0cHM6Ly90Lm1lL01hcmlzYV9rcmlzdGk=');
+export const beiantext = base64DecodeUtf8('');
+export const beiandizi = base64DecodeUtf8('');
 // 实现base64解码UTF-8字符串的函数
 export function base64DecodeUtf8(str) {
     const binary = atob(str);
@@ -187,35 +187,6 @@ export function configs(mihomo = '', singbox = '') {
                 ],
             },
             {
-                label: 'zhuqq2020',
-                options: [
-                    {
-                        label: 'ACL4SSR_Online_Full 全包重度用户使用(与Github同步)',
-                        value: 'https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full.yaml',
-                    },
-                    {
-                        label: 'ACL4SSR_Online_Full_AdblockPlus 全包重度用户使用更多去广告(与Github同步)',
-                        value: 'https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_AdblockPlus.yaml',
-                    },
-                    {
-                        label: 'ACL4SSR_Online_Full_Tiktok 全包重度用户使用抖音全量(与Github同步)',
-                        value: 'https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_Tiktok.yaml',
-                    },
-                    {
-                        label: 'ACL4SSR_Online_Full_WithIcon 全包重度用户使用(与Github同步)(无图标)',
-                        value: 'https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_WithIcon.yaml',
-                    },
-                    {
-                        label: 'ACL4SSR_Online_Mini_MultiMode 专业版自动测速、故障转移、负载均衡(与Github同步)',
-                        value: 'https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Mini_MultiMode.yaml',
-                    },
-                    {
-                        label: '极简分流规则',
-                        value: 'https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/极简分流规则.yaml',
-                    },
-                ],
-            },
-            {
                 label: 'mihomo-party-org',
                 options: [
                     {
@@ -287,6 +258,7 @@ export function configs(mihomo = '', singbox = '') {
     }
     return JSON.stringify(data);
 }
+
 export function modes(sub, userAgent) {
     const modes = {
         mihomo: {
@@ -312,6 +284,7 @@ export function modes(sub, userAgent) {
 - 分IPCIDR代理: 排除 CN IP 不进入代理工具 [查看详情](https://wiki.metacubex.one/config/inbound/tun/#route-exclude-address)
 - 去广告dns: 直连使用 [dns.18bit.cn](https://www.18bit.cn), 代理使用 [dns.adguard-dns.com](https://adguard-dns.io/)
 - 仅代理: 关闭 VPN 代理，使用 mixed(http/socks) 端口进行代理。实际就是关闭了 tun 入站
+- 输出 YAML: 勾选后生成的订阅链接会自动添加 &format=yaml 参数
 
 ## 配置信息
 
@@ -325,6 +298,7 @@ export function modes(sub, userAgent) {
                 { value: 'ea', label: '启用 分IPCIDR代理(ios/macOS/windows/linux 推荐)' },
                 { value: 'adgdns', label: '启用 去广告dns' },
                 { value: 'tun', label: '启用 仅代理' },
+                { value: 'format_yaml', label: '输出为YAML文件' },
             ],
         },
         singbox: {
