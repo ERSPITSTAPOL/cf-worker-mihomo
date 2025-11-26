@@ -5,10 +5,12 @@ import { getFakePage } from './page.js';
 import * as utils from './utils.js';
 import YAML from 'yaml';
 
-export default {
+export
+default {
     async fetch(request, env) {
         const url = new URL(request.url);
         const format = url.searchParams.get('format') || 'json';
+        const yamlParam = url.searchParams.get('yaml') || 'false';
         const e = {
             url,
             urls: url.searchParams.getAll('url'),
@@ -39,7 +41,8 @@ export default {
         e.modes = utils.modes(e.sub, e.userAgent);
 
         if (e.urls.length === 1 && e.urls[0].includes(',')) {
-            e.urls = e.urls[0].split(',').map((u) => u.trim());
+            e.urls = e.urls[0].split(',')
+                .map((u) => u.trim());
         }
 
         if (e.urls.length === 0 || e.urls[0] === '') {
@@ -62,18 +65,20 @@ export default {
             headers = new Headers(responseHeaders);
             status = res.status;
 
-            let body = res.data; // 默认 JSON 字符串
+            let body = res.data; // 默认 JSON
 
-            if (yaml === 'true') {
-                const obj = JSON.parse(res.data);     // JSON → JS 对象
-                body = YAML.stringify(obj);           // JS 对象 → YAML 字符串
+            if (yamlParam === 'true') {
+                const obj = JSON.parse(res.data);
+                body = YAML.stringify(obj);
                 headers.set('Content-Type', 'text/yaml; charset=utf-8');
             } else {
                 headers.set('Content-Type', 'application/json; charset=utf-8');
             }
 
             headers.set('Profile-web-page-url', url.origin);
-            return new Response(body, { status, headers });
+            return new Response(body, {
+                status, headers
+            });
         } catch (err) {
             return new Response(err.message, {
                 status: 400,
@@ -83,4 +88,5 @@ export default {
             });
         }
     },
+
 };
