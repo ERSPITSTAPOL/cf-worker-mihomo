@@ -89,6 +89,13 @@ export function applyTemplate(top, rule, e) {
         top.dns.nameserver = ['https://dns.adguard-dns.com/dns-query'];
         top.dns['nameserver-policy']['RULE-SET:private_domain,cn_domain'] = ['quic://dns.18bit.cn'];
     }
+    
+    if (top['proxy-providers'] && Object.keys(top['proxy-providers']).length === 0) {
+        delete top['proxy-providers'];
+    }
+    if (top['sub-rules'] && Object.keys(top['sub-rules']).length === 0) {
+        delete top['sub-rules'];
+    }
 }
 /**
  * 获取 Mihomo 代理分组信息
