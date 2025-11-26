@@ -32,7 +32,7 @@ export function base64EncodeUtf8(str) {
     return btoa(binary);
 }
 // 订阅链接
-export function buildApiUrl(rawUrl, BASE_API, ua, formatOption) {
+export function buildApiUrl(rawUrl, BASE_API, ua) {
     const params = new URLSearchParams({
         target: ua,
         url: rawUrl,
@@ -40,9 +40,6 @@ export function buildApiUrl(rawUrl, BASE_API, ua, formatOption) {
         list: 'true',
         new_name: 'true',
     });
-    if (formatOption === 'format=yaml') {
-        params.set('format', 'yaml');
-    }
     return `${BASE_API}/sub?${params}`;
 }
 // 处理请求
@@ -301,7 +298,7 @@ export function modes(sub, userAgent) {
                 { value: 'ea', label: '启用 分IPCIDR代理(ios/macOS/windows/linux 推荐)' },
                 { value: 'adgdns', label: '启用 去广告dns' },
                 { value: 'tun', label: '启用 仅代理' },
-                { value: 'format=yaml', label: '输出为YAML文件' },
+                { value: 'yaml', label: '输出为YAML文件' },
             ],
         },
         singbox: {
