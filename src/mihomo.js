@@ -34,27 +34,40 @@ export async function getmihomo_config(e) {
         ...Mihomo_Proxies_Data?.data?.proxies
     ];
 
-    // 分组处理
-    Mihomo_Rule_Data.data["proxy-groups"] = getMihomo_Proxies_Grouping(
+    // 分组
+    let groups = getMihomo_Proxies_Grouping(
         Mihomo_Proxies_Data.data,
         Mihomo_Rule_Data.data
     );
+    // 找到空组
+    const emptyGroupNames = new Set(
+        groups
+            .filter(g => {
+                const p = Array.isArray(g.proxies) ? g.proxies : [];
+                const u = Array.isArray(g.use) ? g.use : [];
+                return p.length === 0 || u.length === 0;
+            })
+            .map(g => g.name)
+    );
 
+    // 删除空组
+    groups = groups.filter(g => !emptyGroupNames.has(g.name));
+
+    // 清理其他组中的引用
+    groups.forEach(g => {
+        if (Array.isArray(g.proxies)) {
+            g.proxies = g.proxies.filter(name => !emptyGroupNames.has(name));
+        }
+        if (Array.isArray(g.use)) {
+            g.use = g.use.filter(name => !emptyGroupNames.has(name));
+        }
+    });
+
+    Mihomo_Rule_Data.data["proxy-groups"] = groups;
     // providers
     Mihomo_Rule_Data.data["proxy-providers"] = Mihomo_Proxies_Data?.data?.providers;
 
-    Mihomo_Rule_Data.data["proxy-groups"] =
-        Mihomo_Rule_Data.data["proxy-groups"].filter(group => {
-
-            const emptyProxies =
-                Array.isArray(group.proxies) && group.proxies.length === 0;
-            const emptyUse =
-                Array.isArray(group.use) && group.use.length === 0;
-            return !(emptyProxies || emptyUse);
-        });
-
     applyTemplate(Mihomo_Top_Data.data, Mihomo_Rule_Data.data, e);
-
     return {
         status: Mihomo_Proxies_Data.status,
         headers: Mihomo_Proxies_Data.headers,
