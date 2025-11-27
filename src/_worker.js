@@ -38,7 +38,7 @@ default {
             beianurl: env.BEIANURL || utils.beiandizi,
             configs: utils.configs(env.MIHOMO, env.SINGBOX),
         };
-        e.modes = utils.modes(e.sub, e.userAgent);
+        e.modes = utils.modes(e.sub, "default");
 
         if (e.urls.length === 1 && e.urls[0].includes(',')) {
             e.urls = e.urls[0].split(',')
