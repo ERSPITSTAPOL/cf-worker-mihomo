@@ -1,8 +1,6 @@
 import CSS from './css.js';
 
-export async
-
-function getFakePage(e) {
+export async function getFakePage(e) {
     return `
 <!DOCTYPE html>
 <html>
@@ -93,23 +91,51 @@ function getFakePage(e) {
             }
         }
 
-        // 模板选择器
+        // 初始化模式容器
+        function initModeContainers() {
+            const modeContainers = document.getElementById('mode-containers');
+            const configs = ${e.configs};
+            
+            for (const [modeId, modeConfig] of Object.entries(MODES)) {
+                const container = document.createElement('div');
+                container.id = \`\${modeId}-container\`;
+                container.className = 'mode-options';
+                
+                // 模板选择器
                 if (!modeConfig.noTemplate) {
                     const templateSelector = document.createElement('div');
                     templateSelector.className = 'template-selector';
-                    templateSelector.innerHTML = ` < div class = "template-toggle collapsed" > 选择配置模板 (未选择) < /div>
-                        <div class="template-options"></div >
-        `;
+                    templateSelector.innerHTML = \`
+                        <div class="template-toggle collapsed">选择配置模板(未选择)</div>
+                        <div class="template-options"></div>
+                    \`;
                     container.appendChild(templateSelector);
                 }
-
-                // 配置（config）选择器 —— 与模板平行（方案 A: 独立的 config 列表）
-                const configSelector = document.createElement('div');
-                configSelector.className = 'config-selector';
-                configSelector.innerHTML = ` < div class = "config-toggle collapsed" > 选择额外配置 (未选择) < /div>
-                    <div class="config-options"></div >
-        `;
-                container.appendChild(configSelector);                
+                // 输入组
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'input-group';
+                
+                const linkLabel = document.createElement('div');
+                linkLabel.style.cssText = 'display: flex; align-items: center; gap: 6px; margin-bottom: 6px;';
+                linkLabel.innerHTML = \`
+                    <label for="link" style="margin: 0;">订阅链接</label>
+                    <div class="tip-wrapper">
+                        <span class="tip-icon" data-mode="\${modeId}">!</span>
+                        <div class="tip-panel"></div>
+                    </div>
+                \`;
+                inputGroup.appendChild(linkLabel);
+                
+                const linkContainer = document.createElement('div');
+                linkContainer.id = \`link-container-\${modeId}\`;
+                linkContainer.innerHTML = \`
+                    <div class="link-row">
+                        <input type="text" class="link-input" placeholder="\${modeConfig.placeholder}" />
+                        <div class="add-btn" onclick="addLinkInput(this, '\${modeId}')">➕</div>
+                    </div>
+                \`;
+                inputGroup.appendChild(linkContainer);
+                
                 // 协议选项
                 if (!modeConfig.noTemplate) {
                     const protocolLabel = document.createElement('label');
@@ -196,26 +222,22 @@ function getFakePage(e) {
 
         // 初始化所有模板选择器
         function initAllTemplateSelectors() {
-            const configs = ${e.configs}; // 仍然使用后端传入的 configs 数据结构
-
+            const configs = ${e.configs};
+            
             for (const modeId of Object.keys(MODES)) {
                 if (!MODES[modeId].noTemplate && configs[modeId]) {
                     initTemplateSelector(modeId, configs[modeId]);
                 }
-                // 如果后端返回了顶层的 config 列表（方案 A：一个独立的 config 列表）
-                if (configs.config) {
-                    initConfigSelector(modeId, configs.config);
-                }
             }
         }
-        // 初始化模板选择器
-        function initConfigSelector(modeId, configGroups) {
-            const selector = document.querySelector(`#${modeId}-container .config-selector`);
-            if (!selector) return;
-            const configToggle = selector.querySelector('.config-toggle');
-            const optionsContainer = selector.querySelector('.config-options');
 
-            // 生成所有配置选项
+        // 初始化模板选择器
+        function initTemplateSelector(modeId, configGroups) {
+            const selector = document.querySelector(\`#\${modeId}-container .template-selector\`);
+            const templateToggle = selector.querySelector('.template-toggle');
+            const optionsContainer = selector.querySelector('.template-options');
+            
+            // 生成所有模板选项
             configGroups.forEach(group => {
                 // 添加分组标签
                 const groupLabel = document.createElement('div');
@@ -225,58 +247,36 @@ function getFakePage(e) {
                 groupLabel.style.backgroundColor = '#f5f5f5';
                 groupLabel.textContent = group.label;
                 optionsContainer.appendChild(groupLabel);
-
+                
                 // 添加选项
                 group.options.forEach(option => {
                     const optionElement = document.createElement('div');
-                    optionElement.className = 'config-option';
+                    optionElement.className = 'template-option';
                     optionElement.textContent = option.label;
                     optionElement.dataset.value = option.value;
                     optionElement.dataset.group = group.label;
-
+                    
                     optionElement.addEventListener('click', function () {
                         // 移除之前选中的样式
-                        selector.querySelectorAll('.config-option.selected').forEach(item => {
+                        selector.querySelectorAll('.template-option.selected').forEach(item => {
                             item.classList.remove('selected');
                         });
-
+                        
                         // 更新显示文本
-                        configToggle.textContent = `${group.label}- ${option.label}`;
-
+                        templateToggle.textContent = \`\${group.label}-\${option.label}\`;
+                        
                         // 添加选中样式
                         this.classList.add('selected');
-
+                        
                         // 点击后自动折叠选项面板
-                        configToggle.classList.add('collapsed');
+                        templateToggle.classList.add('collapsed');
                         optionsContainer.classList.remove('show');
                     });
-
+                    
                     optionsContainer.appendChild(optionElement);
                 });
             });
-
-            // 默认选择第一个选项（如果有）
-            const firstOption = selector.querySelector('.config-option');
-            if (firstOption) {
-                firstOption.classList.add('selected');
-                const groupLabel = firstOption.dataset.group;
-                configToggle.textContent = `请选择额外配置(默认-${groupLabel})`;
-            }
-
-            // 切换展示
-            configToggle.addEventListener('click', function () {
-                this.classList.toggle('collapsed');
-                optionsContainer.classList.toggle('show');
-            });
-
-            // 点击页面其他区域关闭选项面板
-            document.addEventListener('click', function (event) {
-                if (!configToggle.contains(event.target) && !optionsContainer.contains(event.target)) {
-                    configToggle.classList.add('collapsed');
-                    optionsContainer.classList.remove('show');
-                }
-            });
-        }            
+            
             // 默认选择第一个选项
             const firstOption = selector.querySelector('.template-option');
             if (firstOption) {
@@ -328,62 +328,54 @@ function getFakePage(e) {
 
         // 生成配置
         function generateConfig(modeId) {
-            const inputs = document.querySelectorAll(`#${modeId}-container .link-input`);
+            const inputs = document.querySelectorAll(\`#\${modeId}-container .link-input\`);
             let templateLink = '';
-            let configLink = '';
-
+            
             // 只有非v2ray模式才获取选中的模板
             if (!MODES[modeId].noTemplate) {
-                const selectedOption = document.querySelector(`#${modeId}-container .template-option.selected`);
+                const selectedOption = document.querySelector(\`#\${modeId}-container .template-option.selected\`);
                 templateLink = selectedOption ? selectedOption.dataset.value : '';
             }
-
-            // 读取选中的 config（若有）
-            const selectedConfig = document.querySelector(`#${modeId}-container .config-option.selected`);
-            configLink = selectedConfig ? selectedConfig.dataset.value : '';
-
             const protocolParams = {};
-            document.querySelectorAll(`#${modeId}-container .protocol-options input[type="checkbox"]`).forEach(checkbox => {
+            
+            document.querySelectorAll(\`#\${modeId}-container .protocol-options input[type="checkbox"]\`).forEach(checkbox => {
                 protocolParams[checkbox.value] = checkbox.checked;
             });
-
+            
             const subscriptionLinks = Array.from(inputs)
                 .map(input => input.value.trim())
                 .filter(val => val !== '');
-
-            if (subscriptionLinks.length === 0 && !templateLink) {
-                alert('请输入至少一个订阅链接或选择模板');
+            
+            if (subscriptionLinks.length === 0 && templateLink) {
+                alert('请输入至少一个订阅链接');
                 return;
             }
-
+            
             const allLinks = subscriptionLinks.map(link => encodeURIComponent(link));
             const origin = window.location.origin;
 
             const params = [];
 
             if (templateLink) {
-                params.push(`template=${encodeURIComponent(templateLink)}`);
-            }
-            if (configLink) {
-                params.push(`config=${encodeURIComponent(configLink)}`);
+                params.push(\`template=\${encodeURIComponent(templateLink)}\`);
             }
             if (allLinks.length > 0) {
-                params.push(`url=${allLinks.join(',')}`);
+                params.push(\`url=\${allLinks.join(',')}\`);
             }
             if (modeId) {
-                params.push(`${modeId}=true`);
+                params.push(\`\${modeId}=true\`);
             }
 
             for (const [protocol, enabled] of Object.entries(protocolParams)) {
                 if (enabled) {
-                    params.push(`${protocol}=true`);
+                    params.push(\`\${protocol}=true\`);
                 }
             }
 
-            // 输出格式：仍然使用 origin 根路径（与你要求一致）
-            const urlLink = `${origin}/?${params.join('&')}`;
+            const urlLink = \`\${origin}/?\${params.join('&')}\`;
             updateResult(urlLink);
         }
+
         // 复制到剪贴板
         function copyToClipboard() {
             const resultInput = document.getElementById('result');
