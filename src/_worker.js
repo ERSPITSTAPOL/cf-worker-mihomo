@@ -41,7 +41,6 @@ export default {
             Mihomo_default: env.MIHOMOTOP || utils.mihomo_top,
             singbox_1_11: env.SINGBOX_1_11 || utils.singbox_1_11,
             singbox_1_12: env.SINGBOX_1_12 || utils.singbox_1_12,
-            singbox_1_12_alpha: env.SINGBOX_1_12_ALPHA || utils.singbox_1_12_alpha,
             singbox_1_13: env.SINGBOX_1_13 || utils.singbox_1_13,
             beian: env.BEIAN || utils.beiantext,
             beianurl: env.BEIANURL || utils.beiandizi,
