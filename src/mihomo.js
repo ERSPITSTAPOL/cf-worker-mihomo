@@ -85,10 +85,6 @@ export function applyTemplate(top, rule, e) {
             top.tun['exclude-package'] = e.Exclude_Package || [];
         }
     }
-    if (e.adgdns) {
-        top.dns.nameserver = ['https://dns.adguard-dns.com/dns-query'];
-        top.dns['nameserver-policy']['RULE-SET:private_domain,cn_domain'] = ['quic://dns.18bit.cn'];
-    }
     
     if (top['proxy-providers'] && Object.keys(top['proxy-providers']).length === 0) {
         delete top['proxy-providers'];
