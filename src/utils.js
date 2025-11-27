@@ -37,41 +37,33 @@ export function buildApiUrl(rawUrl, BASE_API, ua) {
 }
 // 处理请求
 export async function fetchResponse(url, userAgent) {
-    if (!userAgent) {
-        userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
-    }
+    if (!userAgent) userAgent = 'v2rayNG';
     let response;
     try {
         response = await fetch(url, {
             method: 'GET',
-            headers: {
-                'User-Agent': userAgent,
-            },
+            headers: { 'User-Agent': userAgent },
         });
     } catch {
         return true;
     }
-    // 直接使用 Object.fromEntries 转换 headers
-    const headersObj = Object.fromEntries(response.headers.entries());
-    // 替换非法 Content-Disposition 字段Add commentMore actions
-    const sanitizedCD = sanitizeContentDisposition(response.headers);
-    if (sanitizedCD) {
-        headersObj['content-disposition'] = sanitizedCD;
-    }
-    // 获取响应体的文本内容
-    const textData = await response.text();
 
+    const headersObj = Object.fromEntries(response.headers.entries());
+    const sanitizedCD = sanitizeContentDisposition(response.headers);
+    if (sanitizedCD) headersObj['content-disposition'] = sanitizedCD;
+
+    const textData = await response.text();
     let jsonData;
     try {
         jsonData = YAML.parse(textData, { maxAliasCount: -1, merge: true });
-    } catch (e) {
+    } catch {
         try {
             jsonData = JSON.parse(textData);
-        } catch (yamlError) {
-            // 若YAML解析也失败，保留原始文本
+        } catch {
             jsonData = textData;
         }
     }
+
     return {
         status: response.status,
         headers: headersObj,
@@ -346,7 +338,8 @@ export function sanitizeContentDisposition(headers) {
  * 获取应用包名列表
  * @returns {Promise<Object>} - 返回配置数据对象
  */
-export async function fetchpackExtract() {
+export async function fetchpackExtract(userAgent) {
+    if (!userAgent) userAgent = 'v2rayNG';
     const processNames = new Set();
     const urls = [
         'https://github.com/mnixry/direct-android-ruleset/raw/refs/heads/rules/@Merged/GAME.mutated.yaml',
@@ -355,24 +348,15 @@ export async function fetchpackExtract() {
     const excludeCommentKeywords = ['浏览器'];
     const excludeNames = new Set(['com.android.chrome']);
     for (const url of urls) {
-        const res = await fetch(url, {
-            headers: {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-            },
-        });
-        if (!res.ok) {
-            console.error(`❌ 请求失败: ${url} - ${res.status} ${res.statusText}`);
-            continue;
-        }
+        const res = await fetch(url, { headers: { 'User-Agent': userAgent } });
+        if (!res.ok) continue;
         const text = await res.text();
         for (const line of text.split('\n')) {
             const match = line.match(/PROCESS-NAME\s*,\s*([^\s,]+)/);
             if (match) {
                 const processName = match[1];
-                const hasExcludedComment = excludeCommentKeywords.some((keyword) => line.includes(keyword));
-                if (!hasExcludedComment && !excludeNames.has(processName)) {
-                    processNames.add(processName);
-                }
+                const hasExcludedComment = excludeCommentKeywords.some(k => line.includes(k));
+                if (!hasExcludedComment && !excludeNames.has(processName)) processNames.add(processName);
             }
         }
     }
@@ -382,26 +366,16 @@ export async function fetchpackExtract() {
  * 获取IPCIDR列表
  * @returns {Promise<Object>} - 返回配置数据对象
  */
-export async function fetchipExtract() {
+export async function fetchipExtract(userAgent) {
+    if (!userAgent) userAgent = 'v2rayNG';
     const urls = ['https://raw.githubusercontent.com/Kwisma/clash-rules/release/cncidr.yaml'];
     const ipcidrs = [];
-
     for (const url of urls) {
-        const res = await fetch(url, {
-            headers: {
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
-            },
-        });
-        if (!res.ok) {
-            console.error(`❌ 请求失败: ${url} - ${res.status} ${res.statusText}`);
-            continue;
-        }
+        const res = await fetch(url, { headers: { 'User-Agent': userAgent } });
+        if (!res.ok) continue;
         const data = await res.text();
         const jsondata = YAML.parse(data, { maxAliasCount: -1, merge: true });
-
-        if (Array.isArray(jsondata.payload)) {
-            ipcidrs.push(...jsondata.payload);
-        }
+        if (Array.isArray(jsondata.payload)) ipcidrs.push(...jsondata.payload);
     }
     return ipcidrs;
 }
