@@ -1,17 +1,17 @@
 // import fetch from 'node-fetch';
 import YAML from 'yaml';
-export const backimg = base64DecodeUtf8('');
-export const subapi = base64DecodeUtf8('');
+export const backimg = base64DecodeUtf8( '' );
+export const subapi = base64DecodeUtf8( '' );
 export const mihomo_top = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0VSU1BJVFNUQVBPTC9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvRmFsbGJhY2sueWFtbA==' );
 export const singbox_1_11 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveF8xLjExLlguanNvbg=='
 );
 export const singbox_1_12 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEyLlguanNvbg=='
 );
-export const singbox_1_12_alpha = base64DecodeUtf8('');
+export const singbox_1_12_alpha = base64DecodeUtf8( '' );
 export const singbox_1_13 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEzLlguanNvbg=='
 );
-export const beiantext = base64DecodeUtf8('');
-export const beiandizi = base64DecodeUtf8('');
+export const beiantext = base64DecodeUtf8( '' );
+export const beiandizi = base64DecodeUtf8( '' );
 // 实现base64解码UTF-8字符串的函数
 export function base64DecodeUtf8(str) {
     const binary = atob(str);
@@ -114,14 +114,14 @@ export function configs(mihomo = '', singbox = '') {
     const data = {
         mihomo: [
             {
-                label: '通用',
+                label: '策略组和规则',
                 options: [
                     {
-                        label: '简易分流Selector&Fallback',
+                        label: '简易分流Selector&Fallback Noicon',
                         value: 'https://raw.githubusercontent.com/ERSPITSTAPOL/cf-worker-mihomo/refs/heads/main/template/Selector.yaml',
                     },
                     {
-                        label: '简易分流Auto&Select',
+                        label: '简易分流Auto&Select Withicon',
                         value: 'https://raw.githubusercontent.com/ERSPITSTAPOL/cf-worker-mihomo/refs/heads/main/template/FL.yaml',
                     },
                     {
@@ -161,7 +161,7 @@ export function configs(mihomo = '', singbox = '') {
         ],
         singbox: [
             {
-                label: '通用',
+                label: '策略组和规则',
                 options: [
                     {
                         label: '默认(精简版) (与Github同步) ',
@@ -248,7 +248,6 @@ export function modes(sub, userAgent) {
                 { value: 'udp', label: '启用 UDP', checked: true },
                 { value: 'ep', label: '启用 分应用代理(仅Android)' },
                 { value: 'ea', label: '启用 分IPCIDR代理(ios/macOS/windows/linux 推荐)' },
-                { value: 'adgdns', label: '启用 去广告dns' },
                 { value: 'tun', label: '启用 仅代理' },
                 { value: 'yaml', label: '输出为YAML文件', checked: true },
             ],
@@ -296,7 +295,6 @@ export function modes(sub, userAgent) {
                 { value: 'ep', label: '启用 分应用代理(仅Android)' },
                 { value: 'ea', label: '启用 分IPCIDR代理(ios/macOS/windows/linux 推荐)' },
                 { value: 'tailscale', label: '启用 tailscale' },
-                { value: 'adgdns', label: '启用 去广告dns' },
                 { value: 'tun', label: '启用 仅代理' },
             ],
         },
