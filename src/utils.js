@@ -8,7 +8,7 @@ export const singbox_1_11 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvb
 export const singbox_1_12 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEyLlguanNvbg=='
 );
 export const singbox_1_12_alpha = base64DecodeUtf8( '' );
-export const singbox_1_13 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEzLlguanNvbg=='
+export const singbox_1_13 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0VSU1BJVFNUQVBPTC9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEzLlguanNvbg=='
 );
 export const beiantext = base64DecodeUtf8( '' );
 export const beiandizi = base64DecodeUtf8( '' );
@@ -163,6 +163,10 @@ export function configs(mihomo = '', singbox = '') {
             {
                 label: '策略组和规则',
                 options: [
+                    {
+                        label: '测试ing',
+                        value: 'https://raw.githubusercontent.com/ERSPITSTAPOL/cf-worker-mihomo/refs/heads/main/template/singbox113.yaml',
+                    },
                     {
                         label: '默认(精简版) (与Github同步) ',
                         value: 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/singbox_default.yaml',
