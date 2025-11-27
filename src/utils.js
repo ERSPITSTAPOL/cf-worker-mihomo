@@ -1,5 +1,6 @@
 // import fetch from 'node-fetch';
 import YAML from 'yaml';
+
 export const backimg = base64DecodeUtf8( '' );
 export const subapi = base64DecodeUtf8( '' );
 export const mihomo_top = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0VSU1BJVFNUQVBPTC9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvRmFsbGJhY2sueWFtbA==' );
@@ -7,7 +8,6 @@ export const singbox_1_11 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvb
 );
 export const singbox_1_12 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEyLlguanNvbg=='
 );
-export const singbox_1_12_alpha = base64DecodeUtf8( '' );
 export const singbox_1_13 = base64DecodeUtf8( 'aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0VSU1BJVFNUQVBPTC9jZi13b3JrZXItbWlob21vL3JlZnMvaGVhZHMvbWFpbi9Db25maWcvc2luZ2JveC0xLjEzLlguanNvbg=='
 );
 export const beiantext = base64DecodeUtf8( '' );
