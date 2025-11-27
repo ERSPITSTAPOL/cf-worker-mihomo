@@ -1,9 +1,8 @@
 Selector: &Selector {type: select, disable-udp: false, hidden: false, include-all: true}
-UrlTest:  &UrlTest {type: url-test, interval: 5400, tolerance: 100, lazy: true, url: 'https://www.gstatic.com/generate_204', disable-udp: false, timeout: 3000, max-failed-times: 3, hidden: true, include-all: true}
-Fallback: &Fallback {type: fallback, interval: 5400, lazy: true, url: 'https://www.gstatic.com/generate_204', disable-udp: false, timeout: 3000, max-failed-times: 3, hidden: true, include-all: false}
+UrlTest:  &UrlTest {type: url-test, interval: 5400, tolerance: 100, lazy: true, url: "https://www.gstatic.com/generate_204", disable-udp: false, timeout: 3000, max-failed-times: 3, hidden: true, include-all: true}
+Fallback: &Fallback {type: fallback, interval: 5400, lazy: true, url: "https://www.gstatic.com/generate_204", disable-udp: false, timeout: 3000, max-failed-times: 3, hidden: true, include-all: false}
 DomainMrs: &DomainMrs {type: http, interval: 0, proxy: 🚀Global, behavior: domain, format: mrs}
 IPcidrMrs: &IPcidrMrs {type: http, interval: 0, proxy: 🚀Global, behavior: ipcidr, format: mrs}
-
 proxy-groups: 
   - {name: Google,   type: select, hidden: false, proxies: [🇭🇰HongKong, 🇸🇬Singapore, 🇹🇼Taiwan, 🇺🇸United States, 🇯🇵Japan, 🇰🇷South Korea, 🚀Global, 🛰Others]}
   - {name: Telegram, type: select, hidden: false, proxies: [🇸🇬Singapore, 🇭🇰HongKong, 🇹🇼Taiwan, 🇺🇸United States, 🇯🇵Japan, 🇰🇷South Korea, 🚀Global, 🛰Others]}
@@ -17,22 +16,126 @@ proxy-groups:
   - {name: 🇰🇷South Korea, <<: *Fallback, proxies: [🇰🇷ROK-Selector, 🇰🇷ROK-Auto]}
   - {name: 🇺🇸United States, <<: *Fallback, proxies: [🇺🇸US-Selector, 🇺🇸US-Auto]}
   # Selector
-  - {name: 🚀Global, <<: *Selector, filter: '^(?!.*(DIRECT|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|续费|更多|客户端|官方|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)).*$'}
-  - {name: 🇭🇰HK-Selector, <<: *Selector, filter: '^(?=.*(?i)(香港|🇭🇰|HK|Hong|HKG)).*$'}
-  - {name: 🇸🇬SG-Selector, <<: *Selector, filter: '^(?=.*(?i)(坡|🇸🇬|狮城|新加坡|SG|Singapore|SIN|XSP)).*$'}
-  - {name: 🇹🇼TW-Selector, <<: *Selector, filter: '^(?=.*(?i)(台|灣|台灣|台湾|🇼🇸|🇹🇼|TW|tai|TPE|TSA|KHH)).*$'}
-  - {name: 🇺🇸US-Selector, <<: *Selector, filter: '^(?=.*(美|美国|🇺🇸|US|凤凰城|西雅图|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$'}
-  - {name: 🇯🇵JP-Selector, <<: *Selector, filter: '^(?=.*(?i)(日|日本|东京|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK)).*$'}
-  - {name: 🇰🇷ROK-Selector, <<: *Selector, filter: '^(?=.*(?i)(韩|韩国|🇰🇷|韓|首尔|南朝鲜|KR|KOR|ROK|Korea|South)).*$'}
-  - {name: 🛰Others, <<: *Selector, filter: '^(?!.*(香港|坡|狮城|新加坡|台|灣|台灣|台湾|日|日本|东京|韩|韩国|韓|首尔|南朝鲜|美|美国|凤凰城|西雅图|HK|HKG|Hong|SG|SIN|XSP|Singapore|TW|tai|TPE|TSA|KHH|JP|Japan|NRT|HND|KIX|CTS|FUK|KR|KOR|ROK|Korea|South|US|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|🇭🇰|🇸🇬|🇹🇼|🇯🇵|🇰🇷|🇺🇸|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|续费|更多|客户端|官方|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)).*$'}
+  - {name: 🚀Global, <<: *Selector, filter: "^(?!.*(DIRECT|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|续费|更多|客户端|官方|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)).*$"}
+  - {name: 🇭🇰HK-Selector, <<: *Selector, filter: "^(?=.*(?i)(香港|🇭🇰|HK|Hong|HKG)).*$"}
+  - {name: 🇸🇬SG-Selector, <<: *Selector, filter: "^(?=.*(?i)(坡|🇸🇬|狮城|新加坡|SG|Singapore|SIN|XSP)).*$"}
+  - {name: 🇹🇼TW-Selector, <<: *Selector, filter: "^(?=.*(?i)(台|灣|台灣|台湾|🇼🇸|🇹🇼|TW|tai|TPE|TSA|KHH)).*$"}
+  - {name: 🇺🇸US-Selector, <<: *Selector, filter: "^(?=.*(美|美国|🇺🇸|US|凤凰城|西雅图|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$"}
+  - {name: 🇯🇵JP-Selector, <<: *Selector, filter: "^(?=.*(?i)(日|日本|东京|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK)).*$"}
+  - {name: 🇰🇷ROK-Selector, <<: *Selector, filter: "^(?=.*(?i)(韩|韩国|🇰🇷|韓|首尔|南朝鲜|KR|KOR|ROK|Korea|South)).*$"}
+  - {name: 🛰Others, <<: *Selector, filter: "^(?!.*(香港|坡|狮城|新加坡|台|灣|台灣|台湾|日|日本|东京|韩|韩国|韓|首尔|南朝鲜|美|美国|凤凰城|西雅图|HK|HKG|Hong|SG|SIN|XSP|Singapore|TW|tai|TPE|TSA|KHH|JP|Japan|NRT|HND|KIX|CTS|FUK|KR|KOR|ROK|Korea|South|US|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD|🇭🇰|🇸🇬|🇹🇼|🇯🇵|🇰🇷|🇺🇸|群|邀请|返利|循环|官网|客服|网站|网址|获取|订阅|流量|到期|机场|下次|版本|官址|备用|过期|已用|联系|邮箱|工单|贩卖|通知|倒卖|防止|国内|地址|频道|无法|说明|使用|提示|特别|访问|支持|教程|关注|更新|作者|加入|续费|更多|客户端|官方|USE|USED|TOTAL|EXPIRE|EMAIL|Panel|Channel|Author)).*$"}
   # Auto
-  - {name: 🇭🇰HK-Auto,   <<: *UrlTest, filter: '^(?=.*(?i)(香港|🇭🇰|HK|Hong|HKG)).*$'}
-  - {name: 🇸🇬SG-Auto,   <<: *UrlTest, filter: '^(?=.*(?i)(坡|🇸🇬|狮城|新加坡|SG|Singapore|SIN|XSP)).*$'}
-  - {name: 🇹🇼TW-Auto,   <<: *UrlTest, filter: '^(?=.*(?i)(台|灣|台灣|台湾|🇼🇸|🇹🇼|TW|tai|TPE|TSA|KHH)).*$'}
-  - {name: 🇺🇸US-Auto,   <<: *UrlTest, filter: '^(?=.*(美|美国|🇺🇸|US|凤凰城|西雅图|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$'}
-  - {name: 🇯🇵JP-Auto,   <<: *UrlTest, filter: '^(?=.*(?i)(日|日本|东京|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK)).*$'}
-  - {name: 🇰🇷ROK-Auto, <<: *UrlTest, filter: '^(?=.*(?i)(韩|韩国|🇰🇷|韓|首尔|南朝鲜|KR|KOR|ROK|Korea|South)).*$'}
-   
+  - {name: 🇭🇰HK-Auto,   <<: *UrlTest, filter: "^(?=.*(?i)(香港|🇭🇰|HK|Hong|HKG)).*$"}
+  - {name: 🇸🇬SG-Auto,   <<: *UrlTest, filter: "^(?=.*(?i)(坡|🇸🇬|狮城|新加坡|SG|Singapore|SIN|XSP)).*$"}
+  - {name: 🇹🇼TW-Auto,   <<: *UrlTest, filter: "^(?=.*(?i)(台|灣|台灣|台湾|🇼🇸|🇹🇼|TW|tai|TPE|TSA|KHH)).*$"}
+  - {name: 🇺🇸US-Auto,   <<: *UrlTest, filter: "^(?=.*(美|美国|🇺🇸|US|凤凰城|西雅图|USA|JFK|LAX|ORD|ATL|DFW|SFO|MIA|SEA|IAD)).*$"}
+  - {name: 🇯🇵JP-Auto,   <<: *UrlTest, filter: "^(?=.*(?i)(日|日本|东京|🇯🇵|JP|Japan|NRT|HND|KIX|CTS|FUK)).*$"}
+  - {name: 🇰🇷ROK-Auto, <<: *UrlTest, filter: "^(?=.*(?i)(韩|韩国|🇰🇷|韓|首尔|南朝鲜|KR|KOR|ROK|Korea|South)).*$"}
+mode: rule
+mixed-port: 7890
+ipv6: true
+allow-lan: false
+bind-address: "*"
+lan-allowed-ips: 
+  - 192.168.0.0/16
+  - fc00::/7
+unified-delay: true
+tcp-concurrent: false
+log-level: silent
+find-process-mode: off
+geodata-mode: false
+geodata-loader: memconservative
+geosite-matcher: mph
+geo-auto-update: false
+global-ua: clash.meta
+etag-support: true
+disable-keep-alive: true
+keep-alive-idle: 30
+keep-alive-interval: 15
+skip-auth-prefixes: 
+  - 127.0.0.1/24
+  - ::1/128
+  - fc00::/7
+profile: 
+  store-selected: true
+  store-fake-ip: false
+sniffer: 
+  enable: false
+  force-dns-mapping: true
+  parse-pure-ip: false
+  override-destination: false
+  sniff: 
+    HTTP: 
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS: 
+      ports: [443, 8443]
+      override-destination: false
+    QUIC: 
+      ports: [443, 8443]
+      override-destination: false
+tun: 
+  enable: true
+  stack: system
+  mtu: 9000
+  udp-timeout: 300
+  auto-route: true
+  strict-route: true
+  auto-redirect: false
+  auto-detect-interface: true
+  disable-icmp-forwarding: true
+  endpoint-independent-nat: false
+  dns-hijack: ["any:53", "tcp://any:53"]
+dns:
+  enable: true
+  cache-algorithm: arc
+  cache-max-size: 512
+  prefer-h3: false
+  use-hosts: false
+  use-system-hosts: false
+  respect-rules: false
+  ipv6: false
+  ipv6-timeout: 200
+  enhanced-mode: fake-ip
+  fake-ip-ttl: 1
+  fake-ip-range: 198.18.0.0/16
+  fake-ip-range6: fd00:ffff::/112
+  fake-ip-filter-mode: blacklist
+  fake-ip-filter: 
+    - "*.lan"
+    - "+.miwifi.com"
+    - "+.market.xiaomi.com"
+    - "+.api.xmpush.xiaomi.com"
+    - "+.microsoftonline-p.com"
+    - "+.microsoftonline.com"
+    - "+.msftncsi.com"
+    - "+.microsoft.com"
+    - "+.vivo.com.cn"
+    - "+.dl.l.google.com"
+    - mtalk.google.com
+    - mtalk-dev.google.com
+    - mtalk-staging.google.com
+    - mtalk4.google.com
+    - alt1-mtalk.google.com
+    - alt2-mtalk.google.com
+    - alt3-mtalk.google.com
+    - alt4-mtalk.google.com
+    - alt5-mtalk.google.com
+    - alt6-mtalk.google.com
+    - alt7-mtalk.google.com
+    - alt8-mtalk.google.com
+    - localhost.ptlogin2.qq.com
+  default-nameserver: 
+    - "quic://223.5.5.5"
+  nameserver: 
+    - "tcp://8.8.8.8#🚀Global"
+  proxy-server-nameserver: 
+    - "quic://223.5.5.5"
+  nameserver-policy: 
+    "rule-set:tld-cn,geolocation-cn": ["dhcp://system"]
+  direct-nameserver: 
+    - "quic://223.5.5.5"
+  direct-nameserver-follow-policy: true
 rules: 
   # REJECT
   - RULE-SET,category-ads-all,REJECT-DROP
