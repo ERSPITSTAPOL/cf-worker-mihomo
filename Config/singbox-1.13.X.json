@@ -1,219 +1,167 @@
 {
     "log": {
-        "disabled": false,
-        "level": "info",
-        "output": "./singbox.log",
+        "disabled": true,
+        "level": "error",
         "timestamp": false
+    },
+    "certificate": {
+        "store": "mozilla"
+    },
+    "experimental": {
+        "clash_api": {
+            "default_mode": "Rule"
+        },
+        "cache_file": {
+            "enabled": true,
+            "store_fakeip": false,
+            "store_rdrc": false
+        }
     },
     "dns": {
         "servers": [
             {
-                "type": "hosts",
-                "tag": "hosts",
-                "path": [
-                    "/etc/hosts",
-                    "$HOME/.hosts"
-                ],
-                "predefined": {
-                    "localhost": [
-                        "127.0.0.1",
-                        "::1"
-                    ],
-                    "dns.alidns.com": [
-                        "223.5.5.5",
-                        "223.6.6.6",
-                        "2400:3200::1",
-                        "2400:3200:baba::1"
-                    ],
-                    "dns.google": [
-                        "8.8.4.4",
-                        "8.8.8.8",
-                        "2001:4860:4860::8844",
-                        "2001:4860:4860::8888"
-                    ]
-                }
+                "tag": "remote",
+                "type": "tcp",
+                "server": "8.8.8.8",
+                "detour": "Final"
+            },
+            {
+                "tag": "ali",
+                "type": "quic",
+                "server_port": 853,
+                "tls": {
+                    "enabled": true
+                },
+                "server": "223.5.5.5"
             },
             {
                 "tag": "local",
-                "type": "local"
-            },
-            {
-                "type": "quic",
-                "tag": "DIRECT-DNS",
-                "detour": "🎯 全球直连",
-                "server_port": 853,
-                "server": "dns.alidns.com",
-                "domain_resolver": "local"
-            },
-            {
-                "type": "https",
-                "tag": "PROXY-DNS",
-                "detour": "🚀 节点选择",
-                "server_port": 443,
-                "server": "cloudflare-dns.com",
-                "domain_resolver": "local"
-            },
-            {
-                "type": "fakeip",
-                "tag": "FAKEIP-DNS",
-                "inet4_range": "198.18.0.0/15",
-                "inet6_range": "fc00::/18"
+                "type": "local",
+                "prefer_go": false
             }
         ],
         "rules": [
             {
-                "ip_accept_any": true,
-                "server": "hosts"
+                "action": "route",
+                "clash_mode": "Direct",
+                "server": "local",
+                "strategy": "prefer_ipv4"
             },
             {
-                "clash_mode": "direct",
-                "server": "DIRECT-DNS"
+                "action": "route",
+                "clash_mode": "Global",
+                "server": "remote"
             },
             {
-                "clash_mode": "global",
-                "server": "PROXY-DNS"
+                "action": "reject",
+                "method": "drop",
+                "rule_set": "geosite-category-ads-all"
             },
             {
-                "rule_set": [
-                    "cn_domain",
-                    "private_domain"
-                ],
-                "server": "DIRECT-DNS"
-            },
-            {
-                "query_type": [
-                    "A",
-                    "AAAA"
-                ],
-                "server": "FAKEIP-DNS"
+                "action": "route",
+                "rule_set": "geosite-cn",
+                "server": "local",
+                "strategy": "prefer_ipv4"
             }
         ],
+        "strategy": "ipv4_only",
+        "final": "remote",
         "disable_cache": true,
-        "disable_expire": true,
-        "independent_cache": true,
-        "final": "PROXY-DNS",
-        "strategy": "prefer_ipv4"
+        "disable_expire": false,
+        "independent_cache": false,
+        "reverse_mapping": false
     },
     "inbounds": [
         {
-            "type": "tun",
             "tag": "tun-in",
-            "interface_name": "singbox",
+            "type": "tun",
+            "mtu": 9000,
             "address": [
-                "172.18.0.1/30",
+                "172.19.0.0/30",
                 "fdfe:dcba:9876::1/126"
             ],
-            "mtu": 9000,
+            "stack": "system",
             "auto_route": true,
             "strict_route": true,
             "endpoint_independent_nat": false,
-            "stack": "gvisor",
-            "udp_timeout": "5m",
+            "udp_timeout": "300s",
             "platform": {
                 "http_proxy": {
-                    "enabled": true,
+                    "enabled": false,
                     "server": "127.0.0.1",
-                    "server_port": 20120
+                    "server_port": 7890
                 }
             }
-        },
-        {
-            "tag": "mixed-in",
-            "type": "mixed",
-            "listen": "::",
-            "listen_port": 20120
         }
     ],
     "outbounds": [
         {
-            "tag": "🎯 全局直连",
-            "type": "direct"
-        },
-        {
-            "tag": "🚫 拒绝连接",
-            "type": "block"
+            "type": "direct",
+            "tag": "direct"
         }
     ],
+    "services": [],
     "route": {
-        "auto_detect_interface": true,
-        "final": "🚀 节点选择",
         "default_domain_resolver": {
-            "server": "DIRECT-DNS",
+            "server": "ali",
             "strategy": "prefer_ipv4"
         },
+        "auto_detect_interface": true,
+        "override_android_vpn": false,
+        "final": "Final",
         "rules": [
             {
-                "action": "sniff"
+                "action": "hijack-dns",
+                "port": 53
             },
             {
-                "type": "logical",
-                "mode": "or",
-                "rules": [
-                    {
-                        "port": [
-                            53
-                        ]
-                    },
-                    {
-                        "protocol": "dns"
-                    }
+                "action": "sniff",
+                "sniffer": [
+                    "dns",
+                    "http",
+                    "tls",
+                    "quic",
+                    "ntp",
+                    "stun",
+                    "dtls"
                 ],
-                "action": "hijack-dns"
+                "timeout": "300ms"
             },
             {
+                "action": "hijack-dns",
+                "protocol": "dns"
+            },
+            {
+                "action": "reject",
+                "method": "drop",
+                "network": "icmp"
+            },
+            {
+                "action": "route",
                 "ip_is_private": true,
-                "outbound": "🎯 全球直连"
+                "outbound": "direct"
             },
             {
-                "clash_mode": "direct",
-                "outbound": "🎯 全球直连"
-            },
-            {
-                "clash_mode": "global",
-                "outbound": "🚀 节点选择"
-            },
-            {
-                "action": "route-options"
+                "action": "reject",
+                "method": "drop",
+                "ip_cidr": [
+                    "224.0.0.0/3",
+                    "ff00::/8"
+                ],
+                "source_ip_cidr": [
+                    "224.0.0.0/3",
+                    "ff00::/8"
+                ]
             }
         ],
         "rule_set": [
             {
-                "tag": "private_domain",
+                "tag": "geosite-category-ads-all",
                 "type": "remote",
-                "url": "https://jsd.onmicrosoft.cn/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/private.srs",
                 "format": "binary",
-                "download_detour": "🎯 全球直连"
-            },
-            {
-                "tag": "cn_domain",
-                "type": "remote",
-                "url": "https://jsd.onmicrosoft.cn/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
-                "format": "binary",
-                "download_detour": "🎯 全球直连"
+                "url": "https://fastly.jsdelivr.net/gh/SagerNet/sing-geosite@rule-set-unstable/geosite-category-ads-all.srs",
+                "download_detour": "direct"
             }
         ]
-    },
-    "services": [],
-    "experimental": {
-        "clash_api": {
-            "external_controller": "0.0.0.0:20123",
-            "external_ui": "ui",
-            "secret": "",
-            "default_mode": "rule",
-            "external_ui_download_url": "https://ghfast.top/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
-            "external_ui_download_detour": "🎯 全球直连",
-            "access_control_allow_origin": [
-                "*"
-            ],
-            "access_control_allow_private_network": true
-        },
-        "cache_file": {
-            "enabled": true,
-            "path": "cache.db",
-            "cache_id": "",
-            "store_fakeip": true,
-            "store_rdrc": true,
-            "rdrc_timeout": "1d"
-        }
     }
 }
