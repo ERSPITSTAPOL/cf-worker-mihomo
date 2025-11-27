@@ -15,7 +15,7 @@ export default {
         const singbox = url.searchParams.get('singbox') === 'true';
         const v2ray = url.searchParams.get('v2ray') === 'true';
         if (mihomo) overrideUA = 'clash.meta';
-        else if (singbox) overrideUA = '1.12.11';
+        else if (singbox) overrideUA = 'SFA';
         else if (v2ray) overrideUA = originalUA;
         else overrideUA = originalUA;
 
@@ -39,10 +39,6 @@ export default {
             IMG: env.IMG || utils.backimg,
             sub: env.SUB || utils.subapi,
             Mihomo_default: env.MIHOMOTOP || utils.mihomo_top,
-            singbox_1_11: env.SINGBOX_1_11 || utils.singbox_1_11,
-            singbox_1_12: env.SINGBOX_1_12 || utils.singbox_1_12,
-            singbox_1_12_alpha: env.SINGBOX_1_12_ALPHA || utils.singbox_1_12_alpha,
-            singbox_1_13: env.SINGBOX_1_13 || utils.singbox_1_13,
             beian: env.BEIAN || utils.beiantext,
             beianurl: env.BEIANURL || utils.beiandizi,
             configs: utils.configs(env.MIHOMO, env.SINGBOX),
