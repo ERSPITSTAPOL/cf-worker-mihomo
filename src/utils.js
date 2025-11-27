@@ -38,7 +38,7 @@ export function buildApiUrl(rawUrl, BASE_API, ua) {
 // 处理请求
 export async function fetchResponse(url, userAgent) {
     if (!userAgent) {
-        userAgent = '';
+        userAgent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3';
     }
     let response;
     try {
