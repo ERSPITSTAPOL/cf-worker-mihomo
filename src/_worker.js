@@ -40,16 +40,11 @@ default {
         };
         e.modes = utils.modes(e.sub, e.userAgent);
 
-        if (e.urls.length === 1) {
-           let raw = e.urls[0];
-           try {
-               raw = decodeURIComponent(raw);
-           } catch (_) {}
-          if (raw.includes(',')) {
-             e.urls = raw.split(',').map(u => u.trim());
-          }
+        if (e.urls.length === 1 && e.urls[0].includes(',')) {
+            e.urls = e.urls[0].split(',')
+                .map((u) => u.trim());
         }
-        
+
         if (e.urls.length === 0 || e.urls[0] === '') {
             return new Response(await getFakePage(e), {
                 status: 200,
