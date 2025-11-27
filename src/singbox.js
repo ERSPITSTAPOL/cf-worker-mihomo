@@ -1,35 +1,46 @@
 import * as utils from './utils.js';
 import getSingbox_Outbounds_Data from './outbounds.js';
-export async function getsingbox_config(e) {
-    const top = Verbose(e);
-    e.urls = utils.splitUrlsAndProxies(e.urls);
-    const [Singbox_Top_Data, Singbox_Rule_Data, Singbox_Outbounds_Data, Exclude_Package, Exclude_Address] = await Promise.all([
-        utils.Top_Data(top),
-        utils.Rule_Data(e.rule),
-        getSingbox_Outbounds_Data(e),
-        e.exclude_package ? utils.fetchpackExtract() : null,
-        e.exclude_address ? utils.fetchipExtract() : null,
-    ]);
-    e.Exclude_Package = Exclude_Package;
-    e.Exclude_Address = Exclude_Address;
-    if (!Singbox_Outbounds_Data?.data?.outbounds || Singbox_Outbounds_Data?.data?.outbounds?.length === 0)
-        throw new Error(`节点为空，请使用有效订阅`);
 
-    Singbox_Outbounds_Data.data.outbounds = outboundArrs(Singbox_Outbounds_Data.data);
-    const ApiUrlname = [];
-    Singbox_Outbounds_Data.data.outbounds.forEach((res) => {
-        ApiUrlname.push(res.tag);
-    });
-    // 策略组处理
-    Singbox_Rule_Data.data.outbounds = loadAndSetOutbounds(Singbox_Rule_Data.data.outbounds, ApiUrlname);
-    // 合并 outbounds
-    Singbox_Rule_Data.data.outbounds.push(...Singbox_Outbounds_Data.data.outbounds);
-    applyTemplate(Singbox_Top_Data.data, Singbox_Rule_Data.data, e);
-    return {
-        status: Singbox_Outbounds_Data.status,
-        headers: Singbox_Outbounds_Data.headers,
-        data: JSON.stringify(Singbox_Top_Data.data, null, 4),
-    };
+export async function getsingbox_config(e) {
+    try {
+        const top = Verbose(e);
+        e.urls = utils.splitUrlsAndProxies(e.urls);
+        
+        // 获取数据
+        const [Singbox_Top_Data, Singbox_Rule_Data, Singbox_Outbounds_Data, Exclude_Package, Exclude_Address] = await Promise.all([
+            utils.Top_Data(top),
+            utils.Rule_Data(e.rule),
+            getSingbox_Outbounds_Data(e),
+            e.exclude_package ? utils.fetchpackExtract() : null,
+            e.exclude_address ? utils.fetchipExtract() : null,
+        ]);
+        if (!Singbox_Outbounds_Data?.data?.outbounds || Singbox_Outbounds_Data?.data?.outbounds?.length === 0) {
+            return {
+                status: 200,
+                headers: { "Content-Type": "application/json;charset=utf-8" },
+                data: JSON.stringify({
+                    "调试信息": "检测到节点为空",
+                    "e.urls(传入链接)": e.urls,
+                    "Singbox_Outbounds_Data(实际获取到的内容)": Singbox_Outbounds_Data || "为 null 或 undefined"
+                }, null, 4)
+            };
+        }
+        e.Exclude_Package = Exclude_Package;
+        e.Exclude_Address = Exclude_Address;
+
+        Singbox_Outbounds_Data.data.outbounds = outboundArrs(Singbox_Outbounds_Data.data);
+        const ApiUrlname = [];
+    } catch (err) {
+        return {
+            status: 500,
+            headers: { "Content-Type": "application/json;charset=utf-8" },
+            data: JSON.stringify({
+                error: "脚本执行发生严重错误",
+                message: err.message,
+                stack: err.stack
+            }, null, 4)
+        };
+    }
 }
 export function Verbose(e) {
     let top,
