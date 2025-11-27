@@ -15,7 +15,7 @@ export default {
         const singbox = url.searchParams.get('singbox') === 'true';
         const v2ray = url.searchParams.get('v2ray') === 'true';
         if (mihomo) overrideUA = 'clash.meta';
-        else if (singbox) overrideUA = 'SFA';
+        else if (singbox) overrideUA = '1.12.11';
         else if (v2ray) overrideUA = originalUA;
         else overrideUA = originalUA;
 
