@@ -52,22 +52,23 @@ async function processMultipleUrls(options) {
 // 带回退机制的请求
 async function fetchWithFallback(url, options, addIndex, index = null) {
     let response = await utils.fetchResponse(url, options.userAgent);
-
+    
     if (hasValidOutbounds(response)) {
         return response;
     }
+    const isClashData = response?.data?.proxies && Array.isArray(response.data.proxies);
 
-    // 尝试使用构建的 API URL
-    const apiUrl = utils.buildApiUrl(url, options.sub, 'singbox');
-    response = await utils.fetchResponse(apiUrl, options.userAgent);
+    if (isClashData || response?.status !== 200 || !response?.data) {
+        
+        const apiUrl = utils.buildApiUrl(url, options.sub, 'singbox'); 
+        response = await utils.fetchResponse(apiUrl, options.userAgent);
 
-    if (hasValidOutbounds(response)) {
-        return response;
-    }
-
+        if (hasValidOutbounds(response)) {
+            return response;
+        }
+    }    
     return null;
 }
-
 // 检查响应是否包含有效的 outbounds
 function hasValidOutbounds(response) {
     return response?.data?.outbounds && Array.isArray(response.data.outbounds);
